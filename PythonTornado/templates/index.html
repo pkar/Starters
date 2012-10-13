@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="shortcut icon" href="{{ static_url('favicon.ico') }}"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  {% block head %}
+    <title>{% block title %}Title{% end %}</title>
+    {% block head_include %}
+      <!-- HTML5 shim, for IE6-8 support of HTML5 elements, and firebug -->
+      <!--[if lt IE 9]>
+        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+      <link rel="stylesheet" href="{{ static_url('css/main.css') }}" type="text/css"/>
+    {% end %}
+    <style type="text/css"></style>
+  {% end %}
+  {% block head_extra %}{% end %}
+</head>
+<body>
+  <div class="container-fluid">
+    <noscript><div>{{ _("This site requires Javascript to be enabled.") }}</div></noscript>
+    <div id="header" class="">
+      <div class="hero-unit">
+        <h1>Loading...</h1>
+      </div>
+    </div>
+    <div id="content" class="row-fluid">
+      {% block content %}
+      <div id="left" class="span2"></div>
+      <div id="middle" class="span10"></div>
+      <div id="right"></div>
+      {% end %}
+    </div>
+    <div id="footer" class="">
+      <!-- Footer -->
+      <div class="span12">
+        &copy; Ltd. |
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var Project = Project || {};
+    Project.Models = Project.Models || {};
+    Project.Collections = Project.Collections || {};
+    Project.Utils = Project.Utils || {};
+    Project.User = Project.User || {}
+    Project.User.xsrf = '{{ handler.xsrf_token }}';
+  </script>
+
+  {% for lib in handler.application.conf.JS_LIBS %}
+    <script type="text/javascript" src="{{ static_url(lib) }}"></script>
+  {% end %}
+  {% for lib in handler.application.conf.JS%}
+    <script type="text/javascript" src="{{ static_url(lib) }}"></script>
+  {% end %}
+
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'GOOGLEID']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+    try {
+      // Log all jQuery AJAX requests to Google Analytics
+      $(document).ajaxSend(function(event, xhr, settings) {
+        if (typeof _gaq !== "undefined" && _gaq !== null) {
+          _gaq.push(['_trackPageview', settings.url]);
+        }
+      });
+    } catch(e) {
+
+    }
+    window.onerror = function(message, file, line) {
+      var sFormattedMessage = '[' + file + ' (' + line + ')] ' + message; 
+      _gaq.push(['_trackEvent', 'Exceptions', 'Application', sFormattedMessage, null, true]);
+    }
+  </script>
+
+</body>
+</html>
